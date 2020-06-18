@@ -44,7 +44,7 @@ var validate = ajv.compile(schema);
 // --------------------------------------
 // configure mongodb connection
 // --------------------------------------
-const db = monk(process.env.MONGO_URI);
+const db = monk(process.env.MONGODB_URI);
 db.catch(function(err) {
   console.log(err)
 });
