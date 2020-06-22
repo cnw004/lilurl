@@ -4,14 +4,15 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
 const monk = require('monk');
+const bodyParser = require('body-parser');
 const { nanoid } = require('nanoid');
 require('dotenv').config();
 
 const port = process.env.PORT || 8080
 
 const app = express();
-app.use(express.json());
-//app.use(express.static('./public'));
+app.use(bodyParser.json());
+app.use(express.static('./public'));
 app.use(morgan('tiny'));
 app.use(helmet());
 app.use(cors());
@@ -107,7 +108,7 @@ app.post('/api/url', async (req, res, next) => {
 			url,
 			slug,
 		});
-		res.json(created)
+		res.json({ created })
 	} catch(error) {
 		if (error.message.startsWith('E11000')) {
 			error.message = `Slug ${slug} in use.`

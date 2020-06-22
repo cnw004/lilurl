@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Short.</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <div class="outer-container">
+            <div class="col-flex">
+                <vue-typer
+                    class="col-flex-item" 
+                    id="typer"
+                    text="Short."
+                    :pre-type-delay='700'
+                    :erase-on-complete='false'
+                    :type-delay='120'
+                    :pre-erase-delay='86400'
+                ></vue-typer>
+                <p class="col-flex-item">
+                    Short is a free URL shortener. <br />
+                    Create short, easy links in seconds.
+                </p>
+                <div class="row-flex col-flex-item">
+                    <input class="input row-flex-item" type="text" placeholder="Enter URL here" v-model="url" />
+                    <input class="button row-flex-item" type="submit" value="Shorten URL" v-on:click="buttonClick" />
+                </div>
+                <div class="row-flex col-flex-item" id="response-container" v-if="show">
+                    <div class="row-flex-item resp-item">{{ url }}</div>
+                    <a :href="slug" class="row-flex-item resp-item">cnw.sh/{{ slug }}</a>
+                    <input class="button2 row-flex-item resp-item" type="submit" value="Copy" v-on:click="copyClick" />
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/vue-typer/dist/vue-typer.min.js"></script>
+    <script>
+        let VueTyperPlugin = window.VueTyper.default;
+        Vue.use(VueTyperPlugin);
+        const validateURL = (str) => {
+            const pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+                '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+                '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+                '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+                '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+                '(\\#[-a-z\\d_]*)?$','i');
+            return pattern.test(str)
+        }
+
+        // TODO: try catch block for async
+        const createShortURL = async (url) => {
+            const isValid = validateURL(url);
+            if (isValid) {
+                const reqURL = (vue.url.startsWith("http://")) ? url : `http://${url}`
+                const resp = await fetch("/api/url", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: reqURL })
+                });
+                const data = await resp.json();
+                return data;
+            }
+            return false;
+        }
+
+        const vue = new Vue({
+            el: '#app',
+            data: {
+                url: '',
+                slug: '',
+                show: false,
+            },
+            methods: {
+                buttonClick: async () => {
+                    let resp = await createShortURL(vue.url);
+                    if (resp) {
+                        vue.slug = resp.created.slug;
+                        vue.show = true;
+                    } else {
+                        alert("bad url");
+                    }
+                },
+                copyClick: () => {
+                    alert('here')
+                },
+            }
+        });
+    </script>
+</body>
+</html>
