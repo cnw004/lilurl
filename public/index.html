@@ -15,24 +15,23 @@
                 <vue-typer
                     class="col-flex-item" 
                     id="typer"
-                    text="Short."
+                    text="TinyURL."
                     :pre-type-delay='700'
                     :erase-on-complete='false'
                     :type-delay='120'
                     :pre-erase-delay='86400'
                 ></vue-typer>
                 <p class="col-flex-item">
-                    Short is a free URL shortener. <br />
+                    TinyURL is a free URL shortener. <br />
                     Create short, easy links in seconds.
                 </p>
                 <div class="row-flex col-flex-item">
-                    <input class="input row-flex-item" type="text" placeholder="Enter URL here" v-model="url" />
-                    <input class="button row-flex-item" type="submit" value="Shorten URL" v-on:click="buttonClick" />
+                    <input id="input" class="row-flex-item" type="text" placeholder="Enter URL here" v-model="url" />
+                    <input id="button" class="row-flex-item" type="submit" value="Shorten URL" v-on:click="buttonClick" />
                 </div>
                 <div class="row-flex col-flex-item" id="response-container" v-if="show">
                     <div class="row-flex-item resp-item">{{ displayURL }}</div>
-                    <a :href="id" class="row-flex-item resp-item">cnw.sh/{{ id }}</a>
-                    <input class="button2 row-flex-item resp-item" type="submit" value="Copy" v-on:click="copyClick"/>
+                    <a :href="id" class="row-flex-item resp-item">tinyurl.dev/{{ id }}</a>
                 </div>
             </div>
             <div class="footer">
@@ -85,9 +84,9 @@
             el: '#app',
             data: {
                 url: '',  // the URL the user enters
-                displayURL: '',  // the URL that is shown when the link is created
+                displayURL: 'reddit.com',  // the URL that is shown when the link is created
                 id: '',
-                show: false,
+                show: true,
             },
             methods: {
                 buttonClick: async () => {
@@ -100,10 +99,6 @@
                     } else {
                         alert("bad url");
                     }
-                },
-                copyClick: () => {
-                    alert('here');
-                    const el = document.createElement()
                 },
             }
         });

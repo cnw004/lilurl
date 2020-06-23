@@ -2,6 +2,8 @@
     margin: 0px;
     padding: 0px;
     -webkit-appearance: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
 }
 
 p {
@@ -24,6 +26,53 @@ a:hover {
     margin-left: 10%;
     margin-right: 10%;
     padding-bottom: 0px;
+}
+
+#button {
+    color: white;
+    background-color: #348ceb;
+    padding: 5px;
+    border-radius: 3px;
+    border-width: 0px;
+    font-size: 16px;
+    height: 40px;
+}
+
+#button:hover {
+    background-color: #4696eb;
+}
+
+#button:focus {
+    outline: none;
+}
+
+#input {
+    background-color: white;
+    border-color: transparent;
+    border-width: 1px;
+    border-radius: 3px;
+    padding: 10px;
+    font-size: large;
+}
+
+#input:hover {
+    border-color: #cfebfd;
+}
+
+#input:focus {
+    outline: none;
+}
+
+.vue-typer {
+    color: white;
+    font-size: 50px;
+}
+.vue-typer .custom.char.typed {
+    color: white;
+}
+.vue-typer .custom.caret {
+    background-color: white;
+    width: 4px;
 }
 
 .outer-container {
@@ -49,74 +98,6 @@ a:hover {
 .row-flex-item {
     margin: 5px 0px;
     width: 80%;
-}
-
-.button {
-    color: white;
-    background-color: #348ceb;
-    padding: 5px;
-    border-radius: 3px;
-    border-width: 0px;
-    font-size: 16px;
-    height: 40px;
-}
-
-.button:hover {
-    background-color: #4696eb;
-}
-
-.button:focus {
-    outline: none;
-}
-
-.button2 {
-    color: #348ceb;
-    font-size: 16px;
-    border-width: 0px;
-    background-color: white;
-    width: 30%;
-    height: 35px;
-    border-radius: 3px;
-    font-weight: bold;
-}
-
-.button2:focus {
-    outline: none;
-}
-
-.button2:hover {
-    color: #4696eb;
-    background-color: #e7f5fe;
-}
-
-
-.input {
-    background-color: white;
-    border-color: transparent;
-    border-width: 1px;
-    border-radius: 3px;
-    padding: 10px;
-    font-size: large;
-}
-
-.input:hover {
-    border-color: #cfebfd;
-}
-
-.input:focus {
-    outline: none;
-}
-
-.vue-typer {
-    color: white;
-    font-size: 50px;
-}
-.vue-typer .custom.char.typed {
-    color: white;
-}
-.vue-typer .custom.caret {
-    background-color: white;
-    width: 4px;
 }
 
 .footer {
@@ -154,6 +135,17 @@ a:hover {
 
 @media(min-width: 768px) {
     /* For desktop */
+    #input {
+        flex: 3;
+        margin-right: 5px;
+    }
+
+    #button {
+        height: auto;
+        flex: 1;
+        margin-left: 5px;
+    }
+
     .col-flex {
         display: flex;
         flex-direction: column;
@@ -180,20 +172,10 @@ a:hover {
     
     .row-flex-item {
         width: 50%;
-        margin: 0px 5px;
     }
 
     .resp-item {
         align-self: center;
         justify-content: space-between;
-    }
-
-    .button {
-        height: auto;
-        flex: 1;
-    }
-
-    .input {
-        flex: 3;
     }
 }
