@@ -31,7 +31,7 @@ const schema = {
 			type: ["string"],
 			format: "url",
 		},
-		slug: {
+		id: {
 			descrition: "any string of letters/chars separated by - or _",
 			type: ["string", "integer"],
 			pattern: "^[a-zA-Z0-9_\-]*$",
@@ -50,7 +50,7 @@ db.catch(function(err) {
   console.log(err)
 });
 const urls = db.get('urls');
-urls.createIndex({slug: 1}, {unique: true});
+urls.createIndex({id: 1}, {unique: true});
 
 
 
@@ -59,14 +59,14 @@ urls.createIndex({slug: 1}, {unique: true});
 // --------------------------------------
 // TODO: server static stuff from /
 app.get('/', (_, res) => res.send('Hello World!'));
-app.get('/:slug', async (req, res, next) => {
-	const slug = req.params.slug;
+app.get('/:id', async (req, res, next) => {
+	const id = req.params.id;
 	try {
-		const { url } = await urls.findOne({ slug });
+		const { url } = await urls.findOne({ id });
 		if (url) {
 			res.redirect(url);
 		} else {
-			res.redirect(`/?error=${slug} not found`);
+			res.redirect(`/?error=${id} not found`);
 		}
 	} catch(error) {
 		res.redirect('/?error=Link not found');
@@ -74,18 +74,18 @@ app.get('/:slug', async (req, res, next) => {
 });
 
 
-// GET url from a slug
+// GET url from a id
 // mostly for debugging / testing purposes
 // I will probably remove this endpt
-app.get('/api/url/:slug', async (req, res, next) => {
-	const slug = req.params.slug;
-	console.log(`GET to /api/url/:slug with slug ${slug}`)
+app.get('/api/url/:id', async (req, res, next) => {
+	const id = req.params.id;
+	console.log(`GET to /api/url/:id with id ${id}`)
 	try {
-		const { url } = await urls.findOne({ slug });
+		const { url } = await urls.findOne({ id });
 		if (url) {
 			res.json({"url": url});
 		} else {
-			throw new Error(`No URL for slug ${slug}`);
+			throw new Error(`No URL for id ${id}`);
 		}
 	} catch(error) {
 		next(error);
@@ -95,34 +95,34 @@ app.get('/api/url/:slug', async (req, res, next) => {
 // POST a short url mapping
 // body here follows the shema above
 app.post('/api/url', async (req, res, next) => {
-	let { slug, url } = req.body;
-	console.log(`POST to /api/url with slug: ${slug} and url: ${url}`);
+	let { id, url } = req.body;
+	console.log(`POST to /api/url with id: ${id} and url: ${url}`);
 	try {
 		validate(req.body) // validate request against schema
-		if (!slug) {
-			slug = nanoid(5); // user doesnt set a slug, create a random one
+		if (!id) {
+			id = nanoid(5); // user doesnt set a id, create a random one
 		} 
-		// TODO: dont assume that generated slugs are going to be unique
-		slug = slug.toLowerCase();
+		// TODO: dont assume that generated ids are going to be unique
+		id = id.toLowerCase();
 		const created = await urls.insert({
 			url,
-			slug,
+			id,
 		});
 		res.json({ created })
 	} catch(error) {
 		if (error.message.startsWith('E11000')) {
-			error.message = `Slug ${slug} in use.`
+			error.message = `id ${id} in use.`
 		}
 		next(error);
 	}
 });
 
 // DELETE a url mapping
-app.delete('/api/url/:slug', async (req, res, next) => {
+app.delete('/api/url/:id', async (req, res, next) => {
 	// TODO: write function to delete a mapping
-	const slug = req.params.slug;
+	const id = req.params.id;
 	try {
-		const removed = await urls.remove({"slug": slug});
+		const removed = await urls.remove({"id": id});
 		res.json(removed);
 	} catch(error) {
 		next(error);

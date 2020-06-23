@@ -31,7 +31,7 @@
                 </div>
                 <div class="row-flex col-flex-item" id="response-container" v-if="show">
                     <div class="row-flex-item resp-item">{{ displayURL }}</div>
-                    <a :href="slug" class="row-flex-item resp-item">cnw.sh/{{ slug }}</a>
+                    <a :href="id" class="row-flex-item resp-item">cnw.sh/{{ id }}</a>
                     <input class="button2 row-flex-item resp-item" type="submit" value="Copy" v-on:click="copyClick"/>
                 </div>
             </div>
@@ -86,14 +86,14 @@
             data: {
                 url: '',  // the URL the user enters
                 displayURL: '',  // the URL that is shown when the link is created
-                slug: '',
+                id: '',
                 show: false,
             },
             methods: {
                 buttonClick: async () => {
                     let resp = await createShortURL(vue.url);
                     if (resp) {
-                        vue.slug = resp.created.slug;
+                        vue.id = resp.created.id;
                         vue.displayURL = vue.url;
                         vue.url = "";
                         vue.show = true;
