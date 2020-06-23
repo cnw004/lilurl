@@ -29,7 +29,8 @@
                     <input id="input" class="row-flex-item" type="text" placeholder="Enter URL here" v-model="url" />
                     <input id="button" class="row-flex-item" type="submit" value="Shorten URL" v-on:click="buttonClick" />
                 </div>
-                <div class="row-flex col-flex-item" id="response-container" v-if="show">
+                <div id="error" v-if="showError">Please enter a valid URL</div>
+                <div class="row-flex col-flex-item" id="response-container" v-if="showResults">
                     <div class="row-flex-item resp-item">{{ displayURL }}</div>
                     <a :href="id" class="row-flex-item resp-item">tinyurl.dev/{{ id }}</a>
                 </div>
@@ -86,7 +87,8 @@
                 url: '',  // the URL the user enters
                 displayURL: '',  // the URL that is shown when the link is created
                 id: '',
-                show: false,
+                showError: false,
+                showResults: false,
             },
             methods: {
                 buttonClick: async () => {
@@ -95,9 +97,10 @@
                         vue.id = resp.created.id;
                         vue.displayURL = vue.url;
                         vue.url = "";
-                        vue.show = true;
+                        vue.showError = false;
+                        vue.showResults = true;
                     } else {
-                        alert("bad url");
+                        vue.showError = true;
                     }
                 },
             }

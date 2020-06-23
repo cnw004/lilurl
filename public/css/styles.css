@@ -63,6 +63,10 @@ a:hover {
     outline: none;
 }
 
+#error {
+    color: red;
+}
+
 .vue-typer {
     color: white;
     font-size: 50px;
