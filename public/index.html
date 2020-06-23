@@ -4,6 +4,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Short.</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" type="image/svg+xml" href="static/favicon.svg">
+    <link rel="alternate icon" href="static/favicon.png">
 </head>
 <body>
     <div id="app">
@@ -27,12 +30,21 @@
                     <input class="button row-flex-item" type="submit" value="Shorten URL" v-on:click="buttonClick" />
                 </div>
                 <div class="row-flex col-flex-item" id="response-container" v-if="show">
-                    <div class="row-flex-item resp-item">{{ url }}</div>
+                    <div class="row-flex-item resp-item">{{ displayURL }}</div>
                     <a :href="slug" class="row-flex-item resp-item">cnw.sh/{{ slug }}</a>
-                    <input class="button2 row-flex-item resp-item" type="submit" value="Copy" v-on:click="copyClick" />
+                    <input class="button2 row-flex-item resp-item" type="submit" value="Copy" v-on:click="copyClick"/>
                 </div>
             </div>
-        </div>
+            <div class="footer">
+                <div class="social-media">
+                    <a href="https://www.linkedin.com/in/cole-whitley-a35a94b0/" class="fa fa-linkedin fa-3x"></a>
+                    <a href="https://github.com/cnw004" class="fa fa-github fa-3x"></a>
+                </div>
+                <div class="signoff">
+                    Made with <span style="color: pink;">&hearts;</span> by Cole Whitley
+                </div>
+            </div>
+        </>
         
     </div>
 
@@ -72,7 +84,8 @@
         const vue = new Vue({
             el: '#app',
             data: {
-                url: '',
+                url: '',  // the URL the user enters
+                displayURL: '',  // the URL that is shown when the link is created
                 slug: '',
                 show: false,
             },
@@ -81,13 +94,16 @@
                     let resp = await createShortURL(vue.url);
                     if (resp) {
                         vue.slug = resp.created.slug;
+                        vue.displayURL = vue.url;
+                        vue.url = "";
                         vue.show = true;
                     } else {
                         alert("bad url");
                     }
                 },
                 copyClick: () => {
-                    alert('here')
+                    alert('here');
+                    const el = document.createElement()
                 },
             }
         });
