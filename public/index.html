@@ -15,24 +15,24 @@
                 <vue-typer
                     class="col-flex-item" 
                     id="typer"
-                    text="TinyURL."
+                    text="LilURL."
                     :pre-type-delay='700'
                     :erase-on-complete='false'
                     :type-delay='120'
                     :pre-erase-delay='86400'
                 ></vue-typer>
                 <p class="col-flex-item">
-                    TinyURL is a free URL shortener. <br />
-                    Create short, easy links in seconds.
+                    LilURL is a free URL shortener. <br />
+                    Create short, memorable links in seconds.
                 </p>
                 <div class="row-flex col-flex-item">
-                    <input id="input" class="row-flex-item" type="text" placeholder="Enter URL here" v-model="url" />
+                    <input id="input" class="row-flex-item" type="text" placeholder="Enter URL here" v-model="url" v-on:keyup.enter="buttonClick" />
                     <input id="button" class="row-flex-item" type="submit" value="Shorten URL" v-on:click="buttonClick" />
                 </div>
                 <div id="error" v-if="showError">Please enter a valid URL</div>
                 <div class="row-flex col-flex-item" id="response-container" v-if="showResults">
                     <div class="row-flex-item resp-item">{{ displayURL }}</div>
-                    <a :href="id" class="row-flex-item resp-item">tinyurl.dev/{{ id }}</a>
+                    <a :href="id" class="row-flex-item resp-item">lilurl.dev/{{ id }}</a>
                 </div>
             </div>
             <div class="footer">
