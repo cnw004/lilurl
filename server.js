@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const { nanoid } = require('nanoid');
 require('dotenv').config();
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8080;
 
 const app = express();
 app.use(bodyParser.json());
@@ -21,7 +21,7 @@ app.use(cors());
 // --------------------------------------------
 // configure the schema for /url post endpoint
 // --------------------------------------------
-const ajv = new Ajv({allErrors:true})
+const ajv = new Ajv({allErrors:true});
 const schema = {
 	type: 'object',
 	required: ['url'],
@@ -46,9 +46,6 @@ var validate = ajv.compile(schema);
 // configure mongodb connection
 // --------------------------------------
 const db = monk(process.env.MONGODB_URI);
-db.catch(function(err) {
-  console.log(err)
-});
 const urls = db.get('urls');
 urls.createIndex({id: 1}, {unique: true});
 
@@ -57,7 +54,6 @@ urls.createIndex({id: 1}, {unique: true});
 // --------------------------------------
 // set up all the endpts
 // --------------------------------------
-// TODO: server static stuff from /
 app.get('/', (_, res) => res.send('Hello World!'));
 app.get('/:id', async (req, res, next) => {
 	const id = req.params.id;
@@ -76,7 +72,6 @@ app.get('/:id', async (req, res, next) => {
 
 // GET url from a id
 // mostly for debugging / testing purposes
-// I will probably remove this endpt
 app.get('/api/url/:id', async (req, res, next) => {
 	const id = req.params.id;
 	console.log(`GET to /api/url/:id with id ${id}`)
@@ -100,9 +95,15 @@ app.post('/api/url', async (req, res, next) => {
 	try {
 		validate(req.body) // validate request against schema
 		if (!id) {
-			id = nanoid(5); // user doesnt set a id, create a random one
-		} 
-		// TODO: dont assume that generated ids are going to be unique
+			let found = false;
+			while (!found) {
+				id = nanoid(5); // user doesnt set a id, create a random one
+				let exists = await urls.findOne({ id });  // make sure this id doesnt already exist
+				if (!exists) {
+					found = true;
+				}
+			}
+		}
 		id = id.toLowerCase();
 		const created = await urls.insert({
 			url,
@@ -150,5 +151,6 @@ app.use((error, req, res, next) => {
 		stack: process.env.NODE_ENV === 'production' ? "STACK TRACE" : error.stack,
 	})
 })
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
 
+// start the server
+app.listen(port);
