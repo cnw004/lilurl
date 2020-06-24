@@ -67,7 +67,7 @@
         const createShortURL = async (url) => {
             const isValid = validateURL(url);
             if (isValid) {
-                const reqURL = (vue.url.startsWith("http://") || vue.url.startswith("https://")) ? url : `http://${url}`
+                const reqURL = (vue.url.startsWith("http://") || vue.url.startsWith("https://")) ? url : `http://${url}`
                 const resp = await fetch("/api/url", {
                     method: "POST",
                     headers: {
